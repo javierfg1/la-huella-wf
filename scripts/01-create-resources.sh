@@ -50,7 +50,7 @@ aws --endpoint-url=http://localhost:4566 dynamodb create-table \
 # Comentarios de ejemplo con diferentes sentimientos
 echo "💬 Creando tabla de comentarios..."
 
-aaws --endpoint-url=http://localhost:4566 dynamodb create-table \
+aws --endpoint-url=http://localhost:4566 dynamodb create-table \
   --table-name la-huella-comments \
   --region eu-west-1 \
   --attribute-definitions \
