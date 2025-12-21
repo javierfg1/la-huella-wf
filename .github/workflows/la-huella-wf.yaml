@@ -1,0 +1,53 @@
+name: La Huella Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  localstack-job:
+    runs-on: self-hosted   # runner propio (nodo 1)
+
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Parar contenedores existentes
+        run: |
+          docker compose down || true
+
+      - name: Actualizar imágenes Docker
+        run: |
+          docker compose pull
+
+      - name: Iniciar Localstack
+        run: |
+          docker compose up -d
+
+      - name: Esperar a que Localstack esté listo
+        run: |
+          echo "Esperando 60 segundos a Localstack..."
+          sleep 60
+
+      - name: Crear recursos AWS (S3, DynamoDB, SQS, Logs)
+        run: |
+          chmod +x scripts/01-create-resources.sh
+          ./scripts/01-create-resources.sh
+
+      - name: Insertar datos de ejemplo
+        run: |
+          chmod +x scripts/02-insert-sample-data.sh
+          ./scripts/02-insert-sample-data.sh
+
+      - name: Verificar recursos en Localstack
+        run: |
+          echo "Verificando S3..."
+          aws --endpoint-url=http://localhost:4566 s3 ls
+
+          echo "Verificando DynamoDB..."
+          aws --endpoint-url=http://localhost:4566 dynamodb list-tables
+
+          echo "Verificando SQS..."
+          aws --endpoint-url=http://localhost:4566 sqs list-queues
