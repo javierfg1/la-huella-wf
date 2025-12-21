@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  # ==========================================
+  # LOCALSTACK - Servicios AWS Locales
+  # ==========================================
+  localstack:
+    container_name: localstack
+    image: localstack/localstack:3.0
+    ports:
+      - "4566:4566" # LocalStack Gateway
+      - "4510-4559:4510-4559" # Servicios externos
+    environment:
+      # Servicios AWS a activar
+
+      # Configuración básica
+      - DEBUG=1
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - LOCALSTACK_HOST=localhost
+
+      # Persistencia de datos (opcional)
+      - PERSISTENCE=1
+      - DATA_DIR=/tmp/localstack/data
+
+      # Configuración de red
+      - HOSTNAME_EXTERNAL=localstack
+      - HOSTNAME=localstack
+
+      # AWS Configuración
+      - AWS_DEFAULT_REGION=eu-west-1
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+    volumes:
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      - la-huella-network
+
+networks:
+  la-huella-network:
+    driver: bridge
