@@ -1,0 +1,18 @@
+name: Workflow de prueba
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Mensaje de prueba
+        run: echo "🚀 GitHub Actions funciona correctamente"
