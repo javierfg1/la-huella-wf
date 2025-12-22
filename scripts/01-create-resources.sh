@@ -43,10 +43,10 @@ aws --endpoint-url=http://localhost:4566 dynamodb create-table \
         "WriteCapacityUnits": 5
       }
     }
-  ]' \# Comentarios de ejemplo con diferentes sentimientos
+  ]' \
   --region $REGION 
 
-echo "💬 Creando tabla de comentarios..."
+echo "Creando tabla de comentarios..."
 
 aws --endpoint-url=http://localhost:4566 dynamodb create-table \
   --table-name la-huella-comments \
@@ -75,7 +75,7 @@ aws --endpoint-url=http://localhost:4566 dynamodb create-table \
   ]' \
   --region $REGION
 
-  echo "💬 Creando tabla de comentarios analytics..."
+  echo "Creando tabla de analytics..."
 
   aws --endpoint-url=http://localhost:4566 dynamodb create-table \
   --table-name la-huella-analytics \
