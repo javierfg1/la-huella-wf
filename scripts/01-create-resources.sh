@@ -3,7 +3,7 @@
 # Script para crear recursos aws en LocalStack para La Huella
 # Este script debe ejecutarse antes de insertar datos
 
-echo "🌱 Creando recuros en LocalStack..."
+echo "🌱 Creando recursos en LocalStack..."
 
 # Configuración de variables
 REGION="eu-west-1"
@@ -19,7 +19,7 @@ check_command() {
     fi
 }
 
-echo "📦 Creando tabla de productos..."
+echo "Creando tabla de productos..."
 
 aws --endpoint-url=http://localhost:4566 dynamodb create-table \
   --table-name la-huella-products \
@@ -74,6 +74,8 @@ aws --endpoint-url=http://localhost:4566 dynamodb create-table \
     }
   ]' \
   --region $REGION
+
+  echo "💬 Creando tabla de comentarios analytics..."
 
   aws --endpoint-url=http://localhost:4566 dynamodb create-table \
   --table-name la-huella-analytics \
