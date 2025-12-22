@@ -19,7 +19,6 @@ check_command() {
     fi
 }
 
-# Productos de ejemplo
 echo "📦 Creando tabla de productos..."
 
 aws --endpoint-url=http://localhost:4566 dynamodb create-table \
@@ -44,10 +43,9 @@ aws --endpoint-url=http://localhost:4566 dynamodb create-table \
         "WriteCapacityUnits": 5
       }
     }
-  ]' \
+  ]' \# Comentarios de ejemplo con diferentes sentimientos
   --region $REGION 
 
-# Comentarios de ejemplo con diferentes sentimientos
 echo "💬 Creando tabla de comentarios..."
 
 aws --endpoint-url=http://localhost:4566 dynamodb create-table \
@@ -77,7 +75,49 @@ aws --endpoint-url=http://localhost:4566 dynamodb create-table \
   ]' \
   --region $REGION
 
+  aws --endpoint-url=http://localhost:4566 dynamodb create-table \
+  --table-name la-huella-analytics \
+  --region eu-west-1 \
+  --attribute-definitions \
+    AttributeName=id,AttributeType=S \
+    AttributeName=date,AttributeType=S \
+  --key-schema \
+    AttributeName=id,KeyType=HASH \
+    AttributeName=date,KeyType=RANGE \
+  --provisioned-throughput \
+    ReadCapacityUnits=5,WriteCapacityUnits=5 \
+  --region $REGION
 
-echo "🎉 ¡Tablas de productos y comentarios creadas correctamente!"
+
+  echo "📦 Creando buckets..."
+
+  aws --endpoint-url=http://localhost:4566 s3 mb s3://la-huella-sentiment-reports
+  --region $REGION
+
+  aws --endpoint-url=http://localhost:4566 s3 mb s3://la-huella-uploads
+  --region $REGION
+
+  echo "📦 Creando colas SQS..."
+
+  awslocal --endpoint-url=http://localhost:4566 sqs create-queue \
+  --queue-name la-huella-processing-queue \
+  --region eu-west-1
+
+  awslocal --endpoint-url=http://localhost:4566 sqs create-queue \
+  --queue-name la-huella-notifications-queue \
+  --region eu-west-1  
+
+  awslocal --endpoint-url=http://localhost:4566 sqs create-queue \
+  --queue-name la-huella-processing-dlq \
+  --region eu-west-1
+
+  echo "📦 Creando colas SQS..."
+
+  awslocal --endpoint-url=http://localhost:4566 logs create-log-group --log-group-name --region eu-west-1 /la-huella/sentiment-analysis
+
+  awslocal --endpoint-url=http://localhost:4566 logs create-log-group --log-group-name --region eu-west-1 /la-huella/api
+
+
+echo "🎉 ¡Tablas de productos y comentarios, colas SQS, Buckets, Grupos de Logs creados correctamente!"
 
 echo "🔗 Acceso a LocalStack: http://localhost:4566"

@@ -44,10 +44,13 @@ jobs:
       - name: Verificar recursos en Localstack
         run: |
           echo "Verificando S3..."
-          aws --endpoint-url=http://localhost:4566 s3 ls
+          aws --endpoint-url=http://localhost:4566 s3 ls --region eu-west-1
 
           echo "Verificando DynamoDB..."
-          aws --endpoint-url=http://localhost:4566 dynamodb list-tables
+          aws --endpoint-url=http://localhost:4566 dynamodb list-tables --region eu-west-1
 
           echo "Verificando SQS..."
-          aws --endpoint-url=http://localhost:4566 sqs list-queues
+          aws --endpoint-url=http://localhost:4566 sqs list-queues --region eu-west-1
+
+          echo "Verificando Grupos de Logs..."
+          awslocal --endpoint-url=http://localhost:4566 logs --region eu-west-1 describe-log-groups
