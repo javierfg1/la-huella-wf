@@ -23,7 +23,6 @@ echo "Creando tabla de productos..."
 
 aws --endpoint-url=http://localhost:4566 dynamodb create-table \
   --table-name la-huella-products \
-  --region eu-west-1 \
   --attribute-definitions \
     AttributeName=id,AttributeType=S \
     AttributeName=category,AttributeType=S \
@@ -50,7 +49,6 @@ echo "Creando tabla de comentarios..."
 
 aws --endpoint-url=http://localhost:4566 dynamodb create-table \
   --table-name la-huella-comments \
-  --region eu-west-1 \
   --attribute-definitions \
     AttributeName=id,AttributeType=S \
     AttributeName=productId,AttributeType=S \
@@ -75,11 +73,10 @@ aws --endpoint-url=http://localhost:4566 dynamodb create-table \
   ]' \
   --region $REGION
 
-  echo "Creando tabla de analytics..."
+echo "Creando tabla de analytics..."
 
-  aws --endpoint-url=http://localhost:4566 dynamodb create-table \
+aws --endpoint-url=http://localhost:4566 dynamodb create-table \
   --table-name la-huella-analytics \
-  --region eu-west-1 \
   --attribute-definitions \
     AttributeName=id,AttributeType=S \
     AttributeName=date,AttributeType=S \
@@ -91,33 +88,33 @@ aws --endpoint-url=http://localhost:4566 dynamodb create-table \
   --region $REGION
 
 
-  echo "📦 Creando buckets..."
+echo "📦 Creando buckets..."
 
-  aws --endpoint-url=http://localhost:4566 s3 mb s3://la-huella-sentiment-reports
+aws --endpoint-url=http://localhost:4566 s3 mb s3://la-huella-sentiment-reports
   --region $REGION
 
-  aws --endpoint-url=http://localhost:4566 s3 mb s3://la-huella-uploads
+aws --endpoint-url=http://localhost:4566 s3 mb s3://la-huella-uploads
   --region $REGION
 
-  echo "📦 Creando colas SQS..."
+echo "📦 Creando colas SQS..."
 
-  awslocal --endpoint-url=http://localhost:4566 sqs create-queue \
+aws --endpoint-url=http://localhost:4566 sqs create-queue \
   --queue-name la-huella-processing-queue \
-  --region eu-west-1
+  --region $REGION
 
-  awslocal --endpoint-url=http://localhost:4566 sqs create-queue \
+aws --endpoint-url=http://localhost:4566 sqs create-queue \
   --queue-name la-huella-notifications-queue \
-  --region eu-west-1  
+  --region $REGION  
 
-  awslocal --endpoint-url=http://localhost:4566 sqs create-queue \
+aws --endpoint-url=http://localhost:4566 sqs create-queue \
   --queue-name la-huella-processing-dlq \
-  --region eu-west-1
+  --region $REGION
 
   echo "📦 Creando colas SQS..."
 
-  awslocal --endpoint-url=http://localhost:4566 logs create-log-group --log-group-name --region eu-west-1 /la-huella/sentiment-analysis
+aws --endpoint-url=http://localhost:4566 logs create-log-group --log-group-name --region $REGION /la-huella/sentiment-analysis
 
-  awslocal --endpoint-url=http://localhost:4566 logs create-log-group --log-group-name --region eu-west-1 /la-huella/api
+aws --endpoint-url=http://localhost:4566 logs create-log-group --log-group-name --region $REGION /la-huella/api
 
 
 echo "🎉 ¡Tablas de productos y comentarios, colas SQS, Buckets, Grupos de Logs creados correctamente!"
