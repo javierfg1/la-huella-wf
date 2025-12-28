@@ -29,7 +29,7 @@ jobs:
       - name: Esperar a que Localstack esté listo
         run: |
           echo "Esperando 60 segundos a Localstack..."
-          sleep 60
+          sleep 120
 
       - name: Crear recursos AWS (S3, DynamoDB, SQS, Logs)
         run: |
@@ -53,4 +53,4 @@ jobs:
           aws --endpoint-url=http://localhost:4566 sqs list-queues --region eu-west-1
 
           echo "Verificando Grupos de Logs..."
-          awslocal --endpoint-url=http://localhost:4566 logs --region eu-west-1 describe-log-groups
+          aws --endpoint-url=http://localhost:4566 logs --region eu-west-1 describe-log-groups
